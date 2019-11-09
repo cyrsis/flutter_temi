@@ -3,10 +3,15 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 
 class FlutterTemi {
-  static const MethodChannel _channel =
-      const MethodChannel('flutter_temi');
-  static const EventChannel _onBeWithMeEventChannel = EventChannel('flutter_temi/on_be_with_me_stream');
-  static const EventChannel _onLocationStatusChangeEventChannel = EventChannel('flutter_temi/on_location_status_stream');
+  static const MethodChannel _channel = const MethodChannel('flutter_temi');
+  static const EventChannel _onBeWithMeEventChannel =
+      EventChannel('flutter_temi/on_be_with_me_stream');
+  static const EventChannel _onLocationStatusChangeEventChannel =
+      EventChannel('flutter_temi/on_location_status_stream');
+  static const EventChannel _onLocationsUpdatedEventChannel =
+      EventChannel('flutter_temi/on_locations_updated_stream');
+  static const EventChannel _nlpEventChannel =
+      EventChannel('flutter_temi/nlp_stream');
 
   static Future<String> get platformVersion async {
     final String version = await _channel.invokeMethod('getPlatformVersion');
@@ -51,5 +56,13 @@ class FlutterTemi {
 
   static Stream<String> temiSubscribeToOnLocationStatusChangeEvents() {
     return _onLocationStatusChangeEventChannel.receiveBroadcastStream();
+  }
+
+  static Stream<List<String>> temiSubscribeToOnLocationsUpdatedEvents() {
+    return _onLocationsUpdatedEventChannel.receiveBroadcastStream();
+  }
+
+  static Stream<String> temiSubscribeToNlpEvents() {
+    return _nlpEventChannel.receiveBroadcastStream();
   }
 }

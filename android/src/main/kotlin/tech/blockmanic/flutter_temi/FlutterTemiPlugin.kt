@@ -6,83 +6,46 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import com.robotemi.sdk.*
-import com.robotemi.sdk.listeners.OnBeWithMeStatusChangedListener
-import com.robotemi.sdk.listeners.OnGoToLocationStatusChangedListener
 import io.flutter.plugin.common.EventChannel
 import com.robotemi.sdk.TtsRequest
 
 
-
-class FlutterTemiPlugin : MethodCallHandler, OnGoToLocationStatusChangedListener, EventChannel.StreamHandler {
-    override fun onGoToLocationStatusChanged(location: String?, status: String?, descriptionId: Int, description: String?) {
-        val response = HashMap<String, Any?>()
-        response["location"] = location
-        response["status"] = status
-        response["descriptionId"] = descriptionId
-        response["description"] = description
-        locationChangeEventSink?.success(response)
-    }
+class FlutterTemiPlugin : MethodCallHandler  {
 
     private val robot: Robot = Robot.getInstance()
-    private var locationChangeEventSink: EventChannel.EventSink? = null
+    private val goToLocationStatusChangedImpl : GoToLocationStatusChangedImpl = GoToLocationStatusChangedImpl()
+    private val onBeWithMeStatusChangedImpl : OnBeWithMeStatusChangedImpl = OnBeWithMeStatusChangedImpl()
+    private val onLocationsUpdatedImpl : OnLocationsUpdatedImpl = OnLocationsUpdatedImpl()
+    private val nlpImpl : NlpImpl = NlpImpl()
 
     companion object {
-        private const val ON_BE_WITH_ME_STREAM_CHANNEL_NAME = "flutter_temi/on_be_with_me_stream"
-        private const val ON_LOCATION_STATUS_STREAM_CHANNEL_NAME = "flutter_temi/on_location_status_stream"
         @JvmStatic
         fun registerWith(registrar: Registrar) {
             val channel = MethodChannel(registrar.messenger(), "flutter_temi")
             val plugin = FlutterTemiPlugin()
             channel.setMethodCallHandler(plugin)
-//            val onBeWithMeEventChannel = EventChannel(registrar.messenger(), ON_BE_WITH_ME_STREAM_CHANNEL_NAME)
-//            onBeWithMeEventChannel.setStreamHandler(plugin)
-            val onLocationStatusChangeEventChannel = EventChannel(registrar.messenger(), ON_LOCATION_STATUS_STREAM_CHANNEL_NAME)
-            onLocationStatusChangeEventChannel.setStreamHandler(plugin)
+
+            val onBeWithMeEventChannel = EventChannel(registrar.messenger(), OnBeWithMeStatusChangedImpl.STREAM_CHANNEL_NAME)
+            onBeWithMeEventChannel.setStreamHandler(plugin.onBeWithMeStatusChangedImpl)
+
+            val onLocationStatusChangeEventChannel = EventChannel(registrar.messenger(), GoToLocationStatusChangedImpl.STREAM_CHANNEL_NAME)
+            onLocationStatusChangeEventChannel.setStreamHandler(plugin.goToLocationStatusChangedImpl)
+
+            val onLocationsUpdatedEventChannel = EventChannel(registrar.messenger(), OnLocationsUpdatedImpl.STREAM_CHANNEL_NAME)
+            onLocationsUpdatedEventChannel.setStreamHandler(plugin.onLocationsUpdatedImpl)
+
+            val onNlpEventChannel = EventChannel(registrar.messenger(), NlpImpl.STREAM_CHANNEL_NAME)
+            onNlpEventChannel.setStreamHandler(plugin.nlpImpl)
         }
     }
 
     init {
-        robot.addOnGoToLocationStatusChangedListener(this)
+        robot.addOnGoToLocationStatusChangedListener(this.goToLocationStatusChangedImpl)
+        robot.addOnBeWithMeStatusChangedListener(this.onBeWithMeStatusChangedImpl)
+        robot.addOnLocationsUpdatedListener(this.onLocationsUpdatedImpl)
+        robot.addNlpListener(this.nlpImpl)
     }
 
-    override fun onListen(arguments: Any?, eventSink: EventChannel.EventSink?) {
-        this.locationChangeEventSink = eventSink
-    }
-
-    override fun onCancel(p0: Any?) {
-        this.locationChangeEventSink = null
-    }
-
-
-
-
-//    override fun onBeWithMeStatusChanged(status: String?) {
-//        when (status) {
-//            "abort" -> {
-//                this.locationChangeEventSink?.success("abort")
-//            }
-//
-//            "calculating" -> {
-//                this.locationChangeEventSink?.success("calculating")
-//            }
-//
-//            "lock" -> {
-//                this.locationChangeEventSink?.success("lock")
-//            }
-//
-//            "search" -> {
-//                this.locationChangeEventSink?.success("search")
-//            }
-//
-//            "start" -> {
-//                this.locationChangeEventSink?.success("start")
-//            }
-//
-//            "track" -> {
-//                this.locationChangeEventSink?.success("track")
-//            }
-//        }// do something i.e. speak.
-//    }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
         if (call.method == "getPlatformVersion") {
