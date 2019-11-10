@@ -1,8 +1,8 @@
 name: flutter_temi
 description: Flutter plugin for Temi
 version: 0.0.1
-author:
-homepage:
+author: Victor Tong
+homepage: https://www.blockmanic.com/
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

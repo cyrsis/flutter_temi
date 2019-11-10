@@ -13,6 +13,7 @@ class FlutterTemi {
   static const EventChannel _nlpEventChannel =
       EventChannel('flutter_temi/nlp_stream');
 
+
   static Future<String> get platformVersion async {
     final String version = await _channel.invokeMethod('getPlatformVersion');
     return version;
@@ -38,12 +39,12 @@ class FlutterTemi {
     await _channel.invokeMethod('temi_skid_joy');
   }
 
-  static temiTiltAngle() async {
-    await _channel.invokeMethod('temi_tilt_angle');
+  static temiTiltAngle(angle) async {
+    await _channel.invokeMethod('temi_tilt_angle', angle);
   }
 
-  static temiTurnBy() async {
-    await _channel.invokeMethod('temi_turn_by');
+  static temiTurnBy(angle) async {
+    await _channel.invokeMethod('temi_turn_by',angle);
   }
 
   static temiTiltBy() async {
@@ -54,11 +55,11 @@ class FlutterTemi {
     return _onBeWithMeEventChannel.receiveBroadcastStream();
   }
 
-  static Stream<String> temiSubscribeToOnLocationStatusChangeEvents() {
+  static Stream<dynamic> temiSubscribeToOnLocationStatusChangeEvents() {
     return _onLocationStatusChangeEventChannel.receiveBroadcastStream();
   }
 
-  static Stream<List<String>> temiSubscribeToOnLocationsUpdatedEvents() {
+  static Stream<List<dynamic>> temiSubscribeToOnLocationsUpdatedEvents() {
     return _onLocationsUpdatedEventChannel.receiveBroadcastStream();
   }
 
