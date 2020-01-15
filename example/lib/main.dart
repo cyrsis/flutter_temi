@@ -56,8 +56,7 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          child: Wrap(
             children: <Widget>[
               FlatButton(
                 child: Text('Goto Allen'),
@@ -89,7 +88,24 @@ class _MyAppState extends State<MyApp> {
               ),
               FlatButton(
                 child: Text('Title Angle'),
-                onPressed: () async => FlutterTemi.temiTiltAngle(15.2),
+                onPressed: ()  async {
+                  var degree = -20;
+                  await FlutterTemi.temiTiltAngle(degree);
+                  print(" 1- Tilt by ${degree}");
+
+                  await Future.delayed(Duration(milliseconds: 1000));
+
+                  var degreeTwo = -20;
+                   await FlutterTemi.temiTiltAngle(degreeTwo);
+                  print("2- Tilt by ${degreeTwo}");
+
+
+                  await Future.delayed(Duration(milliseconds: 1000));
+
+                  var degreethree = 30;
+                  await FlutterTemi.temiTiltAngle(degreethree);
+                  print("3-  Tilt by ${degreethree}");
+                },
               ),
               FlatButton(
                 child: Text('Trun by'),

@@ -3,17 +3,24 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 
 class FlutterTemi {
+
+  //Single Method Channel
   static const MethodChannel _channel = const MethodChannel('flutter_temi');
+
+  //Event Channel for Stream
   static const EventChannel _onBeWithMeEventChannel =
       EventChannel('flutter_temi/on_be_with_me_stream');
+
   static const EventChannel _onLocationStatusChangeEventChannel =
       EventChannel('flutter_temi/on_location_status_stream');
+
   static const EventChannel _onLocationsUpdatedEventChannel =
       EventChannel('flutter_temi/on_locations_updated_stream');
+
   static const EventChannel _nlpEventChannel =
       EventChannel('flutter_temi/nlp_stream');
 
-
+  //Test for the PlatformVersion
   static Future<String> get platformVersion async {
     final String version = await _channel.invokeMethod('getPlatformVersion');
     return version;
@@ -40,6 +47,7 @@ class FlutterTemi {
   }
 
   static temiTiltAngle(angle) async {
+    //-25 to 0 +55
     await _channel.invokeMethod('temi_tilt_angle', angle);
   }
 

@@ -70,10 +70,12 @@ class FlutterTemiPlugin : MethodCallHandler  {
             robot.skidJoy(-1.0F, 1.0F)
             result.success(true)
         } else if(call.method == "temi_tilt_angle") {
-            robot.tiltAngle(23, 5.3F)
+            val tilt_angele = call.arguments<Int>()
+            robot.tiltAngle(tilt_angele, 15.3F)
             result.success(true)
         } else if(call.method == "temi_turn_by") {
-            robot.turnBy(90, 6.2F)
+            val turn_by_angele = call.arguments<Int>()
+            robot.turnBy(turn_by_angele, 6.2F)
             result.success(true)
         } else if(call.method == "temi_tilt_by") {
             robot.tiltBy(70, 1.2F)
