@@ -1,19 +1,17 @@
 package tech.blockmanic.flutter_temi
 
-import com.robotemi.sdk.NlpResult
-import com.robotemi.sdk.Robot
+import com.robotemi.sdk.listeners.OnDetectionStateChangedListener
 import io.flutter.plugin.common.EventChannel
 
-class NlpImpl : Robot.NlpListener, EventChannel.StreamHandler {
+class OnDetectionStateChangedImpl : OnDetectionStateChangedListener, EventChannel.StreamHandler {
     private var eventSink: EventChannel.EventSink? = null
 
     companion object {
-        const val STREAM_CHANNEL_NAME = "flutter_temi/nlp_stream"
+        const val STREAM_CHANNEL_NAME = "flutter_temi/on_detection_state_stream"
     }
 
-
-    override fun onNlpCompleted(nlpResult: NlpResult) {
-        eventSink?.success(nlpResult.action)
+    override fun onDetectionStateChanged(state: Int) {
+        eventSink?.success(state)
     }
 
     override fun onListen(arguments: Any?, eventSink: EventChannel.EventSink?) {
