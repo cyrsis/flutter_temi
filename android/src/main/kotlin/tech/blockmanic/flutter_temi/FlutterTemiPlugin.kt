@@ -18,6 +18,7 @@ class FlutterTemiPlugin : MethodCallHandler  {
     private val onLocationsUpdatedImpl : OnLocationsUpdatedImpl = OnLocationsUpdatedImpl()
     private val nlpImpl : NlpImpl = NlpImpl()
     private val onDetectionStateChangedImpl : OnDetectionStateChangedImpl = OnDetectionStateChangedImpl()
+    private val onUserInteractionChangedImpl : OnUserInteractionChangedImpl = OnUserInteractionChangedImpl()
 
     companion object {
         @JvmStatic
@@ -40,6 +41,9 @@ class FlutterTemiPlugin : MethodCallHandler  {
 
             val onDetectionStateEventChannel = EventChannel(registrar.messenger(), OnBeWithMeStatusChangedImpl.STREAM_CHANNEL_NAME)
             onDetectionStateEventChannel.setStreamHandler(plugin.onDetectionStateChangedImpl)
+
+            val onUserInteractionEventChannel = EventChannel(registrar.messenger(), OnUserInteractionChangedImpl.STREAM_CHANNEL_NAME)
+            onUserInteractionEventChannel.setStreamHandler(plugin.onDetectionStateChangedImpl)
         }
     }
 
@@ -49,6 +53,7 @@ class FlutterTemiPlugin : MethodCallHandler  {
         robot.addOnLocationsUpdatedListener(this.onLocationsUpdatedImpl)
         robot.addNlpListener(this.nlpImpl)
         robot.addOnDetectionStateChangedListener(this.onDetectionStateChangedImpl)
+        robot.addOnUserInteractionChangedListener(this.onUserInteractionChangedImpl)
     }
 
 
