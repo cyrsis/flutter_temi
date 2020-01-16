@@ -10,7 +10,7 @@ class OnLocationsUpdatedImpl: OnLocationsUpdatedListener, EventChannel.StreamHan
         const val STREAM_CHANNEL_NAME = "flutter_temi/on_locations_updated_stream"
     }
 
-    override fun onLocationsUpdated(locations: MutableList<String>?) {
+    override fun onLocationsUpdated(locations: List<String>) {
         eventSink?.success(locations)
     }
 

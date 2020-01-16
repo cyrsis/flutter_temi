@@ -12,7 +12,7 @@ class NlpImpl : Robot.NlpListener, EventChannel.StreamHandler {
     }
 
 
-    override fun onNlpCompleted(nlpResult: NlpResult?) {
+    override fun onNlpCompleted(nlpResult: NlpResult) {
         eventSink?.success(nlpResult?.action)
     }
 

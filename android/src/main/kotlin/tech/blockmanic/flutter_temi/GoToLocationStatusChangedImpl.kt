@@ -11,7 +11,7 @@ class GoToLocationStatusChangedImpl : OnGoToLocationStatusChangedListener, Event
         const val STREAM_CHANNEL_NAME = "flutter_temi/on_location_status_stream"
     }
 
-    override fun onGoToLocationStatusChanged(location: String?, status: String?, descriptionId: Int, description: String?) {
+    override fun onGoToLocationStatusChanged(location: String, status: String, descriptionId: Int, description: String) {
         val response = HashMap<String, Any?>()
         response["location"] = location
         response["status"] = status

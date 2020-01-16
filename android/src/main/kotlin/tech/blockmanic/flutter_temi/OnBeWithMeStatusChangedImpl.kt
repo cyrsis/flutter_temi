@@ -10,7 +10,7 @@ class OnBeWithMeStatusChangedImpl: OnBeWithMeStatusChangedListener, EventChannel
         const val STREAM_CHANNEL_NAME = "flutter_temi/on_be_with_me_stream"
     }
 
-    override fun onBeWithMeStatusChanged(status: String?) {
+    override fun onBeWithMeStatusChanged(status: String) {
         eventSink?.success(status)
     }
 
