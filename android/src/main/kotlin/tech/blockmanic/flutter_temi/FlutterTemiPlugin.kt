@@ -58,40 +58,107 @@ class FlutterTemiPlugin : MethodCallHandler  {
 
 
     override fun onMethodCall(call: MethodCall, result: Result) {
-        if (call.method == "getPlatformVersion") {
-            result.success("Android ${android.os.Build.VERSION.RELEASE}")
-        } else if (call.method == "temi_speak") {
-            val speech = call.arguments<String>()
-            val request = TtsRequest.create(speech, true)
-            robot.speak(request)
-            result.success(true)
-        } else if (call.method == "temi_goto") {
-            val location = call.arguments<String>()
-            robot.goTo(location)
-            result.success(true)
-        } else if (call.method == "temi_save_location") {
-            val location = call.arguments<String>()
-            robot.saveLocation(location)
-            result.success(true)
-        } else if (call.method == "temi_follow_me") {
-            robot.beWithMe()
-            result.success(true)
-        } else if(call.method == "temi_skid_joy") {
-            robot.skidJoy(-1.0F, 1.0F)
-            result.success(true)
-        } else if(call.method == "temi_tilt_angle") {
-            val tilt_angele = call.arguments<Int>()
-            robot.tiltAngle(tilt_angele, 15.3F)
-            result.success(true)
-        } else if(call.method == "temi_turn_by") {
-            val turn_by_angele = call.arguments<Int>()
-            robot.turnBy(turn_by_angele, 6.2F)
-            result.success(true)
-        } else if(call.method == "temi_tilt_by") {
-            robot.tiltBy(70, 1.2F)
-            result.success(true)
-        } else {
-            result.notImplemented()
+        when (call.method) {
+            "temi_serial_number" -> {
+                result.success(robot.serialNumber)
+            }
+            "temi_privacy_mode" -> {
+                result.success(robot.privacyMode)
+            }
+            "temi_set_privacy_mode" -> {
+                val privacyMode = call.arguments<Boolean>()
+                robot.privacyMode = privacyMode
+                result.success(privacyMode)
+            }
+            "temi_battery_data" -> {
+                val returnMap = HashMap<String, Any>(2)
+                val batteryData = robot.batteryData!!
+                returnMap.put("level", batteryData.batteryPercentage)
+                returnMap.put("isCharging", batteryData.isCharging)
+                result.success(returnMap)
+            }
+            "temi_show_top_bar" -> {
+                robot.showTopBar()
+                result.success(true)
+            }
+            "temi_hide_top_bar" -> {
+                robot.hideTopBar()
+                result.success(true)
+            }
+            "temi_speak" -> {
+                val speech = call.arguments<String>()
+                val request = TtsRequest.create(speech, true)
+                robot.speak(request)
+                result.success(true)
+            }
+            "temi_goto" -> {
+                val location = call.arguments<String>()
+                robot.goTo(location)
+                result.success(true)
+            }
+            "temi_save_location" -> {
+                val location = call.arguments<String>()
+                result.success(robot.saveLocation(location))
+            }
+            "temi_get_locations" -> {
+                result.success(robot.locations)
+            }
+            "temi_delete_location" -> {
+                val location = call.arguments<String>()
+                result.success(robot.deleteLocation(location))
+            }
+            "temi_be_with_me" -> {
+                robot.beWithMe()
+                result.success(true)
+            }
+            "temi_constraint_be_with" -> {
+                robot.constraintBeWith()
+                result.success(true)
+            }
+            "temi_follow_me" -> {
+                robot.beWithMe()
+                result.success(true)
+            }
+            "temi_stop_movement" -> {
+                robot.stopMovement()
+                result.success(true)
+            }
+            "temi_skid_joy" -> {
+                val values = call.arguments<List<Double>>()
+                robot.skidJoy(values[0].toFloat(), values[1].toFloat())
+                result.success(true)
+            }
+            "temi_tilt_angle" -> {
+                val tiltAngle = call.arguments<Int>()
+                robot.tiltAngle(tiltAngle)
+                result.success(true)
+            }
+            "temi_turn_by" -> {
+                val turnByAngle = call.arguments<Int>()
+                robot.turnBy(turnByAngle)
+                result.success(true)
+            }
+            "temi_tilt_by" -> {
+                val degrees = call.arguments<Int>()
+                robot.tiltBy(degrees)
+                result.success(true)
+            }
+            "temi_start_telepresence" -> {
+                val arguments = call.arguments<List<String>>()
+                result.success(robot.startTelepresence(arguments[0], arguments[1]))
+            }
+            "temi_user_info" -> {
+                val userInfo = robot.adminInfo!!
+                val userInfoMap = HashMap<String, Any?>(3)
+                userInfoMap["userId"] = userInfo.userId
+                userInfoMap["name"] = userInfo.name
+                userInfoMap["picUrl"] = userInfo.picUrl
+                userInfoMap["role"] = userInfo.role
+                result.success(userInfoMap)
+            }
+            else -> {
+                result.notImplemented()
+            }
         }
     }
 }
