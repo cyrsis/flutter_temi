@@ -17,8 +17,16 @@ class FlutterTemiPlugin : MethodCallHandler  {
     private val onBeWithMeStatusChangedImpl : OnBeWithMeStatusChangedImpl = OnBeWithMeStatusChangedImpl()
     private val onLocationsUpdatedImpl : OnLocationsUpdatedImpl = OnLocationsUpdatedImpl()
     private val nlpImpl : NlpImpl = NlpImpl()
-    private val onDetectionStateChangedImpl : OnDetectionStateChangedImpl = OnDetectionStateChangedImpl()
     private val onUserInteractionChangedImpl : OnUserInteractionChangedImpl = OnUserInteractionChangedImpl()
+    private val ttsListenerImpl : TtsListenerImpl = TtsListenerImpl()
+    private val wakeupWordListenerImpl : WakeupWordListenerImpl = WakeupWordListenerImpl()
+    private val onConstraintBeWithStatusListenerImpl : OnConstraintBeWithStatusListenerImpl = OnConstraintBeWithStatusListenerImpl()
+    //private val onTelepresenceStatusChangedListenerImpl : OnTelepresenceStatusChangedListenerImpl = OnTelepresenceStatusChangedListenerImpl()
+    //private val onUsersUpdatedListenerImpl : OnUsersUpdatedListenerImpl = OnUsersUpdatedListenerImpl()
+    private val onPrivacyModeChangedListenerImpl : OnPrivacyModeChangedListenerImpl = OnPrivacyModeChangedListenerImpl()
+    private val onBatteryStatusChangedListenerImpl : OnBatteryStatusChangedListenerImpl = OnBatteryStatusChangedListenerImpl()
+    private val onDetectionStateChangedListenerImpl : OnDetectionStateChangedListenerImpl = OnDetectionStateChangedListenerImpl()
+    private val onRobotReadyListenerImpl : OnRobotReadyListenerImpl = OnRobotReadyListenerImpl()
 
     companion object {
         @JvmStatic
@@ -39,11 +47,32 @@ class FlutterTemiPlugin : MethodCallHandler  {
             val onNlpEventChannel = EventChannel(registrar.messenger(), NlpImpl.STREAM_CHANNEL_NAME)
             onNlpEventChannel.setStreamHandler(plugin.nlpImpl)
 
-            val onDetectionStateEventChannel = EventChannel(registrar.messenger(), OnBeWithMeStatusChangedImpl.STREAM_CHANNEL_NAME)
-            onDetectionStateEventChannel.setStreamHandler(plugin.onDetectionStateChangedImpl)
+            val ttsListenerEventChannel = EventChannel(registrar.messenger(), TtsListenerImpl.STREAM_CHANNEL_NAME)
+            ttsListenerEventChannel.setStreamHandler(plugin.ttsListenerImpl)
 
-            val onUserInteractionEventChannel = EventChannel(registrar.messenger(), OnUserInteractionChangedImpl.STREAM_CHANNEL_NAME)
-            onUserInteractionEventChannel.setStreamHandler(plugin.onDetectionStateChangedImpl)
+            val wakeupWordListenerEventChannel = EventChannel(registrar.messenger(), WakeupWordListenerImpl.STREAM_CHANNEL_NAME)
+            wakeupWordListenerEventChannel.setStreamHandler(plugin.wakeupWordListenerImpl)
+
+            val onConstraintBeWithStatusListenerEventChannel = EventChannel(registrar.messenger(), OnConstraintBeWithStatusListenerImpl.STREAM_CHANNEL_NAME)
+            onConstraintBeWithStatusListenerEventChannel.setStreamHandler(plugin.onConstraintBeWithStatusListenerImpl)
+
+            //val onTelepresenceStatusChangedListenerEventChannel = EventChannel(registrar.messenger(), OnTelepresenceStatusChangedListenerImpl.STREAM_CHANNEL_NAME)
+            //onTelepresenceStatusChangedListenerEventChannel.setStreamHandler(plugin.onTelepresenceStatusChangedListenerImpl)
+
+            //val onUsersUpdatedListenerEventChannel = EventChannel(registrar.messenger(), OnUsersUpdatedListenerImpl.STREAM_CHANNEL_NAME)
+            //onUsersUpdatedListenerEventChannel.setStreamHandler(plugin.onUsersUpdatedListenerImpl)
+
+            val onPrivacyModeChangedListenerEventChannel = EventChannel(registrar.messenger(), OnPrivacyModeChangedListenerImpl.STREAM_CHANNEL_NAME)
+            onPrivacyModeChangedListenerEventChannel.setStreamHandler(plugin.onPrivacyModeChangedListenerImpl)
+
+            val onBatteryStatusChangedListenerEventChannel = EventChannel(registrar.messenger(), OnBatteryStatusChangedListenerImpl.STREAM_CHANNEL_NAME)
+            onBatteryStatusChangedListenerEventChannel.setStreamHandler(plugin.onBatteryStatusChangedListenerImpl)
+
+            val onDetectionStateChangedEventChannel = EventChannel(registrar.messenger(), OnDetectionStateChangedListenerImpl.STREAM_CHANNEL_NAME)
+            onDetectionStateChangedEventChannel.setStreamHandler(plugin.onDetectionStateChangedListenerImpl)
+
+            val onRobotReadyEventChannel = EventChannel(registrar.messenger(), OnRobotReadyListenerImpl.STREAM_CHANNEL_NAME)
+            onRobotReadyEventChannel.setStreamHandler(plugin.onRobotReadyListenerImpl)
         }
     }
 
@@ -52,8 +81,16 @@ class FlutterTemiPlugin : MethodCallHandler  {
         robot.addOnBeWithMeStatusChangedListener(this.onBeWithMeStatusChangedImpl)
         robot.addOnLocationsUpdatedListener(this.onLocationsUpdatedImpl)
         robot.addNlpListener(this.nlpImpl)
-        robot.addOnDetectionStateChangedListener(this.onDetectionStateChangedImpl)
         robot.addOnUserInteractionChangedListener(this.onUserInteractionChangedImpl)
+        robot.addTtsListener(this.ttsListenerImpl)
+        robot.addWakeupWordListener(this.wakeupWordListenerImpl)
+        robot.addOnConstraintBeWithStatusChangedListener(this.onConstraintBeWithStatusListenerImpl)
+        //robot.addOnTelepresenceStatusChangedListener(this.onTelepresenceStatusChangedListenerImpl)
+        //robot.addOnUsersUpdatedListener(this.onUsersUpdatedListenerImpl)
+        robot.addOnPrivacyModeStateChangedListener(this.onPrivacyModeChangedListenerImpl)
+        robot.addOnBatteryStatusChangedListener(this.onBatteryStatusChangedListenerImpl)
+        robot.addOnDetectionStateChangedListener(this.onDetectionStateChangedListenerImpl)
+        robot.addOnRobotReadyListener(this.onRobotReadyListenerImpl)
     }
 
 
@@ -71,11 +108,7 @@ class FlutterTemiPlugin : MethodCallHandler  {
                 result.success(privacyMode)
             }
             "temi_battery_data" -> {
-                val returnMap = HashMap<String, Any>(2)
-                val batteryData = robot.batteryData!!
-                returnMap.put("level", batteryData.batteryPercentage)
-                returnMap.put("isCharging", batteryData.isCharging)
-                result.success(returnMap)
+                result.success(OnBatteryStatusChangedListenerImpl.batteryToMap(robot.batteryData!!))
             }
             "temi_show_top_bar" -> {
                 robot.showTopBar()
@@ -149,12 +182,35 @@ class FlutterTemiPlugin : MethodCallHandler  {
             }
             "temi_user_info" -> {
                 val userInfo = robot.adminInfo!!
-                val userInfoMap = HashMap<String, Any?>(3)
-                userInfoMap["userId"] = userInfo.userId
-                userInfoMap["name"] = userInfo.name
-                userInfoMap["picUrl"] = userInfo.picUrl
-                userInfoMap["role"] = userInfo.role
-                result.success(userInfoMap)
+                result.success(OnUsersUpdatedListenerImpl.contactToMap(userInfo))
+            }
+            "temi_get_contacts" -> {
+                val contacts = robot.allContact
+                val maps = contacts.map { contact -> OnUsersUpdatedListenerImpl.contactToMap(contact)}
+                result.success(maps)
+            }
+            "temi_get_recent_calls" -> {
+                val recentCalls = robot.recentCalls
+                val recentCallMaps = recentCalls.map {
+                    call ->
+                        val callMap = HashMap<String, Any?>(4)
+                        callMap["callType"] = call.callType
+                        callMap["sessionId"] = call.sessionId
+                        callMap["timestamp"] = call.timestamp
+                        callMap["userId"] = call.userId
+                        callMap
+                }
+                result.success(recentCallMaps)
+            }
+            "temi_toggle_wakeup" -> {
+                val disable = call.arguments<Boolean>()
+                robot.toggleWakeup(disable)
+                result.success(true)
+            }
+            "temi_toggle_navigation_billboard" -> {
+                val hide = call.arguments<Boolean>()
+                robot.toggleNavigationBillboard(hide)
+                result.success(true)
             }
             else -> {
                 result.notImplemented()

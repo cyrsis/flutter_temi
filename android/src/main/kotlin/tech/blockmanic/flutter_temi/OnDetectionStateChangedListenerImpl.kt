@@ -3,11 +3,11 @@ package tech.blockmanic.flutter_temi
 import com.robotemi.sdk.listeners.OnDetectionStateChangedListener
 import io.flutter.plugin.common.EventChannel
 
-class OnDetectionStateChangedImpl : OnDetectionStateChangedListener, EventChannel.StreamHandler {
+class OnDetectionStateChangedListenerImpl: OnDetectionStateChangedListener, EventChannel.StreamHandler {
     private var eventSink: EventChannel.EventSink? = null
 
     companion object {
-        const val STREAM_CHANNEL_NAME = "flutter_temi/on_detection_state_stream"
+        const val STREAM_CHANNEL_NAME = "flutter_temi/on_detection_state_changed_stream"
     }
 
     override fun onDetectionStateChanged(state: Int) {
@@ -21,4 +21,5 @@ class OnDetectionStateChangedImpl : OnDetectionStateChangedListener, EventChanne
     override fun onCancel(p0: Any?) {
         this.eventSink = null
     }
+
 }

@@ -12,7 +12,7 @@ class GoToLocationStatusChangedImpl : OnGoToLocationStatusChangedListener, Event
     }
 
     override fun onGoToLocationStatusChanged(location: String, status: String, descriptionId: Int, description: String) {
-        val response = HashMap<String, Any?>()
+        val response = HashMap<String, Any?>(4)
         response["location"] = location
         response["status"] = status
         response["descriptionId"] = descriptionId
