@@ -34,6 +34,13 @@ class _MyAppState extends State<MyApp> {
       }
       print('Location event: ${event.runtimeType}');
     });
+
+    FlutterTemi.temiSubscribeToDetectionStateChangedEvents().listen((event) {
+      print("Welcome Mode ${event}");
+
+    });
+
+
   }
 
   @override
@@ -41,7 +48,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('Temi Plugin example app'),
         ),
         body: Center(
           child: Wrap(

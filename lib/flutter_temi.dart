@@ -202,7 +202,7 @@ class FlutterTemi {
     return _onBatteryStatusChangedEventChannel.receiveBroadcastStream();
   }
 
-  static Stream<int> temiSubscribeToDetectionStateChangedEvents() {
+  static Stream<dynamic> temiSubscribeToDetectionStateChangedEvents() {
     return _onDetectionStateChangedEventChannel.receiveBroadcastStream();
   }
 

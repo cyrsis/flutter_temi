@@ -10,6 +10,9 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="flutter_temi_example"
         android:icon="@mipmap/ic_launcher">
+        <meta-data
+                android:name="com.robotemi.sdk.metadata.KIOSK"
+                android:value="TRUE" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -28,6 +31,8 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
+
         </activity>
     </application>
 </manifest>
