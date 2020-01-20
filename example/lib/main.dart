@@ -12,6 +12,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  bool IsBusyMode = false;
+  StreamSubscription sub;
 
   @override
   void initState() {
@@ -21,7 +23,6 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
@@ -35,12 +36,7 @@ class _MyAppState extends State<MyApp> {
       print('Location event: ${event.runtimeType}');
     });
 
-    FlutterTemi.temiSubscribeToDetectionStateChangedEvents().listen((event) {
-      print("Welcome Mode ${event}");
-
-    });
-
-
+    SubTemi();
   }
 
   @override
@@ -53,12 +49,13 @@ class _MyAppState extends State<MyApp> {
         body: Center(
           child: Wrap(
             children: <Widget>[
+
+
               FlatButton(
                 child: Text('Goto Allen'),
                 onPressed: () async {
                   await FlutterTemi.temiGoTo('allen');
                   await FlutterTemi.temiSpeak('Allen I am coming');
-
                 },
               ),
               FlatButton(
@@ -83,7 +80,7 @@ class _MyAppState extends State<MyApp> {
               ),
               FlatButton(
                 child: Text('Title Angle'),
-                onPressed: ()  async {
+                onPressed: () async {
                   var degree = -20;
                   await FlutterTemi.temiTiltAngle(degree);
                   print(" 1- Tilt by ${degree}");
@@ -91,20 +88,25 @@ class _MyAppState extends State<MyApp> {
                   await Future.delayed(Duration(milliseconds: 1000));
 
                   var degreeTwo = -20;
-                   await FlutterTemi.temiTiltAngle(degreeTwo);
+                  await FlutterTemi.temiTiltAngle(degreeTwo);
                   print("2- Tilt by ${degreeTwo}");
-
 
                   await Future.delayed(Duration(milliseconds: 1000));
 
                   var degreethree = 30;
                   await FlutterTemi.temiTiltAngle(degreethree);
                   print("3-  Tilt by ${degreethree}");
+
+                  SubTemi();
                 },
               ),
               FlatButton(
                 child: Text('Trun by'),
-                onPressed: () async => FlutterTemi.temiTurnBy(15),
+                onPressed: () async {
+                  await FlutterTemi.temiTurnBy(90);
+                  await Future.delayed(Duration(seconds: 3));
+                  await FlutterTemi.temiTurnBy(-180);
+                },
               ),
               FlatButton(
                 child: Text('Title  by'),
@@ -115,5 +117,16 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
+  }
+
+  void SubTemi() {
+    sub = FlutterTemi.temiSubscribeToDetectionStateChangedEvents()
+        .listen((event) {
+      if (event == 2) {
+        print("user Deteched ${event}");
+        IsBusyMode == true;
+        sub.cancel();
+      }
+    });
   }
 }
