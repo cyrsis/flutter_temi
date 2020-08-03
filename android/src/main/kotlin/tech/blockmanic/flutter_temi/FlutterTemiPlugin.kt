@@ -19,6 +19,8 @@ class FlutterTemiPlugin : MethodCallHandler  {
     private val nlpImpl : NlpImpl = NlpImpl()
     private val onUserInteractionChangedImpl : OnUserInteractionChangedImpl = OnUserInteractionChangedImpl()
     private val ttsListenerImpl : TtsListenerImpl = TtsListenerImpl()
+    private val asrListenerImpl : ASRListenerImpl = ASRListenerImpl()
+
     private val wakeupWordListenerImpl : WakeupWordListenerImpl = WakeupWordListenerImpl()
     private val onConstraintBeWithStatusListenerImpl : OnConstraintBeWithStatusListenerImpl = OnConstraintBeWithStatusListenerImpl()
     //private val onTelepresenceStatusChangedListenerImpl : OnTelepresenceStatusChangedListenerImpl = OnTelepresenceStatusChangedListenerImpl()
@@ -49,6 +51,9 @@ class FlutterTemiPlugin : MethodCallHandler  {
 
             val ttsListenerEventChannel = EventChannel(registrar.messenger(), TtsListenerImpl.STREAM_CHANNEL_NAME)
             ttsListenerEventChannel.setStreamHandler(plugin.ttsListenerImpl)
+
+            val asrListenerEventChannel = EventChannel(registrar.messenger(), ASRListenerImpl.STREAM_CHANNEL_NAME)
+            asrListenerEventChannel.setStreamHandler(plugin.asrListenerImpl)
 
             val wakeupWordListenerEventChannel = EventChannel(registrar.messenger(), WakeupWordListenerImpl.STREAM_CHANNEL_NAME)
             wakeupWordListenerEventChannel.setStreamHandler(plugin.wakeupWordListenerImpl)
@@ -83,6 +88,7 @@ class FlutterTemiPlugin : MethodCallHandler  {
         robot.addNlpListener(this.nlpImpl)
         robot.addOnUserInteractionChangedListener(this.onUserInteractionChangedImpl)
         robot.addTtsListener(this.ttsListenerImpl)
+        robot.addAsrListener(this.asrListenerImpl) //asr
         robot.addWakeupWordListener(this.wakeupWordListenerImpl)
         robot.addOnConstraintBeWithStatusChangedListener(this.onConstraintBeWithStatusListenerImpl)
         //robot.addOnTelepresenceStatusChangedListener(this.onTelepresenceStatusChangedListenerImpl)
@@ -91,6 +97,8 @@ class FlutterTemiPlugin : MethodCallHandler  {
         robot.addOnBatteryStatusChangedListener(this.onBatteryStatusChangedListenerImpl)
         robot.addOnDetectionStateChangedListener(this.onDetectionStateChangedListenerImpl)
         robot.addOnRobotReadyListener(this.onRobotReadyListenerImpl)
+
+
     }
 
 

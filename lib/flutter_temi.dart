@@ -26,6 +26,9 @@ class FlutterTemi {
   static const EventChannel _ttsEventChannel =
       EventChannel('flutter_temi/tts_stream');
 
+  static const EventChannel _asrEventChannel =
+  EventChannel('flutter_temi/asr_stream');
+
   static const EventChannel _wakeupWordEventChannel =
       EventChannel('flutter_temi/wakeup_word_stream');
 
@@ -175,6 +178,10 @@ class FlutterTemi {
 
   static Stream<Map<String, dynamic>> temiSubscribeToTtsEvents() {
     return _ttsEventChannel.receiveBroadcastStream();
+  }
+
+  static Stream<Map<String, dynamic>> temiSubscribeToAsrEvents() {
+    return _asrEventChannel.receiveBroadcastStream();
   }
 
   static Stream<Map<String, dynamic>> temiSubscribeToWakeupWordEvents() {

@@ -49,8 +49,12 @@ class _MyAppState extends State<MyApp> {
         body: Center(
           child: Wrap(
             children: <Widget>[
-
-
+              new StreamBuilder(
+                  stream: FlutterTemi.temiSubscribeToAsrEvents(),
+                  builder: (BuildContext context, snapshot) {
+                    if (!snapshot.hasData) return const Text('loading ASR');
+                    return new Text(snapshot.data);
+                  }),
               FlatButton(
                 child: Text('Goto Allen'),
                 onPressed: () async {
