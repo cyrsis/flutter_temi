@@ -14,6 +14,8 @@
         <meta-data
                 android:name="com.robotemi.sdk.metadata.KIOSK"
                 android:value="TRUE" />
+
+        <meta-data android:name="@string/metadata_override_nlu" android:value="TRUE" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

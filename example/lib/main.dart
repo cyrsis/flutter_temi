@@ -49,6 +49,7 @@ class _MyAppState extends State<MyApp> {
         body: Center(
           child: Wrap(
             children: <Widget>[
+
               new StreamBuilder(
                   stream: FlutterTemi.temiSubscribeToAsrEvents(),
                   builder: (BuildContext context, snapshot) {

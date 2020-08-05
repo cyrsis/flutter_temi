@@ -18,6 +18,13 @@ class ASRListenerImpl : Robot.AsrListener, EventChannel.StreamHandler {
         this.eventSink?.success(asrResult);
     }
 
+    override fun onListen(arguments: Any?, eventSink: EventChannel.EventSink?) {
+        this.eventSink = eventSink
+    }
+
+    override fun onCancel(p0: Any?) {
+        this.eventSink = null
+    }
 
 
 }
