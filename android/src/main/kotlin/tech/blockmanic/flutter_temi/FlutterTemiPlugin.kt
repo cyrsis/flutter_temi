@@ -10,25 +10,25 @@ import io.flutter.plugin.common.EventChannel
 import com.robotemi.sdk.TtsRequest
 
 
-class FlutterTemiPlugin : MethodCallHandler  {
+class FlutterTemiPlugin : MethodCallHandler {
 
     private val robot: Robot = Robot.getInstance()
-    private val goToLocationStatusChangedImpl : GoToLocationStatusChangedImpl = GoToLocationStatusChangedImpl()
-    private val onBeWithMeStatusChangedImpl : OnBeWithMeStatusChangedImpl = OnBeWithMeStatusChangedImpl()
-    private val onLocationsUpdatedImpl : OnLocationsUpdatedImpl = OnLocationsUpdatedImpl()
-    private val nlpImpl : NlpImpl = NlpImpl()
-    private val onUserInteractionChangedImpl : OnUserInteractionChangedImpl = OnUserInteractionChangedImpl()
-    private val ttsListenerImpl : TtsListenerImpl = TtsListenerImpl()
-    private val asrListenerImpl : ASRListenerImpl = ASRListenerImpl()
+    private val goToLocationStatusChangedImpl: GoToLocationStatusChangedImpl = GoToLocationStatusChangedImpl()
+    private val onBeWithMeStatusChangedImpl: OnBeWithMeStatusChangedImpl = OnBeWithMeStatusChangedImpl()
+    private val onLocationsUpdatedImpl: OnLocationsUpdatedImpl = OnLocationsUpdatedImpl()
+    private val nlpImpl: NlpImpl = NlpImpl()
+    private val onUserInteractionChangedImpl: OnUserInteractionChangedImpl = OnUserInteractionChangedImpl()
+    private val ttsListenerImpl: TtsListenerImpl = TtsListenerImpl()
+    private val asrListenerImpl: ASRListenerImpl = ASRListenerImpl()
 
-    private val wakeupWordListenerImpl : WakeupWordListenerImpl = WakeupWordListenerImpl()
-    private val onConstraintBeWithStatusListenerImpl : OnConstraintBeWithStatusListenerImpl = OnConstraintBeWithStatusListenerImpl()
+    private val wakeupWordListenerImpl: WakeupWordListenerImpl = WakeupWordListenerImpl()
+    private val onConstraintBeWithStatusListenerImpl: OnConstraintBeWithStatusListenerImpl = OnConstraintBeWithStatusListenerImpl()
     //private val onTelepresenceStatusChangedListenerImpl : OnTelepresenceStatusChangedListenerImpl = OnTelepresenceStatusChangedListenerImpl()
     //private val onUsersUpdatedListenerImpl : OnUsersUpdatedListenerImpl = OnUsersUpdatedListenerImpl()
-    private val onPrivacyModeChangedListenerImpl : OnPrivacyModeChangedListenerImpl = OnPrivacyModeChangedListenerImpl()
-    private val onBatteryStatusChangedListenerImpl : OnBatteryStatusChangedListenerImpl = OnBatteryStatusChangedListenerImpl()
-    private val onDetectionStateChangedListenerImpl : OnDetectionStateChangedListenerImpl = OnDetectionStateChangedListenerImpl()
-    private val onRobotReadyListenerImpl : OnRobotReadyListenerImpl = OnRobotReadyListenerImpl()
+    private val onPrivacyModeChangedListenerImpl: OnPrivacyModeChangedListenerImpl = OnPrivacyModeChangedListenerImpl()
+    private val onBatteryStatusChangedListenerImpl: OnBatteryStatusChangedListenerImpl = OnBatteryStatusChangedListenerImpl()
+    private val onDetectionStateChangedListenerImpl: OnDetectionStateChangedListenerImpl = OnDetectionStateChangedListenerImpl()
+    private val onRobotReadyListenerImpl: OnRobotReadyListenerImpl = OnRobotReadyListenerImpl()
 
     companion object {
         @JvmStatic
@@ -132,6 +132,16 @@ class FlutterTemiPlugin : MethodCallHandler  {
                 robot.speak(request)
                 result.success(true)
             }
+            "temi_speak_force" -> {
+                val speech = call.arguments<String>()
+                val request = TtsRequest.create(speech, false)
+                robot.speak(request)
+                result.success(true)
+            }
+            "temi_finishe_conversation" -> {
+                robot.finishConversation()
+                result.success(true)
+            }
             "temi_goto" -> {
                 val location = call.arguments<String>()
                 robot.goTo(location)
@@ -194,21 +204,24 @@ class FlutterTemiPlugin : MethodCallHandler  {
             }
             "temi_get_contacts" -> {
                 val contacts = robot.allContact
-                val maps = contacts.map { contact -> OnUsersUpdatedListenerImpl.contactToMap(contact)}
+                val maps = contacts.map { contact -> OnUsersUpdatedListenerImpl.contactToMap(contact) }
                 result.success(maps)
             }
             "temi_get_recent_calls" -> {
                 val recentCalls = robot.recentCalls
-                val recentCallMaps = recentCalls.map {
-                    call ->
-                        val callMap = HashMap<String, Any?>(4)
-                        callMap["callType"] = call.callType
-                        callMap["sessionId"] = call.sessionId
-                        callMap["timestamp"] = call.timestamp
-                        callMap["userId"] = call.userId
-                        callMap
+                val recentCallMaps = recentCalls.map { call ->
+                    val callMap = HashMap<String, Any?>(4)
+                    callMap["callType"] = call.callType
+                    callMap["sessionId"] = call.sessionId
+                    callMap["timestamp"] = call.timestamp
+                    callMap["userId"] = call.userId
+                    callMap
                 }
                 result.success(recentCallMaps)
+            }
+            "temi_wakeup" -> {
+                robot.wakeup()
+                result.success(true)
             }
             "temi_toggle_wakeup" -> {
                 val disable = call.arguments<Boolean>()

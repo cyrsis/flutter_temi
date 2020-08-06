@@ -27,7 +27,7 @@ class FlutterTemi {
       EventChannel('flutter_temi/tts_stream');
 
   static const EventChannel _asrEventChannel =
-  EventChannel('flutter_temi/asr_stream');
+      EventChannel('flutter_temi/asr_stream');
 
   static const EventChannel _wakeupWordEventChannel =
       EventChannel('flutter_temi/wakeup_word_stream');
@@ -80,6 +80,14 @@ class FlutterTemi {
   static temiSpeak(String speech) async {
     await _channel.invokeMethod('temi_speak', speech);
   }
+
+  static temiSpeakForce(String speech) async {
+    await _channel.invokeMethod('temi_speak_force', speech);
+  }
+  static temiFinisheConverstaion() async {
+    await _channel.invokeMethod('temi_finishe_conversation');
+  }
+
 
   static temiGoTo(String location) async {
     await _channel.invokeMethod('temi_goto', location);
@@ -152,6 +160,10 @@ class FlutterTemi {
     await _channel.invokeMethod('temi_toggle_wakeup', disable);
   }
 
+  static temiWakeup() async {
+    await _channel.invokeMethod('temi_wakeup');
+  }
+
   static temiSetNavigationBillboard(bool hide) async {
     await _channel.invokeMethod('temi_toggle_navigation_billboard', hide);
   }
@@ -180,7 +192,7 @@ class FlutterTemi {
     return _ttsEventChannel.receiveBroadcastStream();
   }
 
-  static Stream<Map<String, dynamic>> temiSubscribeToAsrEvents() {
+  static Stream<dynamic> temiSubscribeToAsrEvents() {
     return _asrEventChannel.receiveBroadcastStream();
   }
 
