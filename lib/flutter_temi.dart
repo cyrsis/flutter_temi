@@ -144,7 +144,8 @@ class FlutterTemi {
         .invokeMethod('temi_start_telepresence', [displayName, peerId]);
   }
 
-  static Future<Map<String, dynamic>> get userInfo async {
+  //${some['name']} ${some['userId']}
+  static Future<Map<dynamic, dynamic>> get userInfo async {
     return await _channel.invokeMethod('temi_user_info');
   }
 

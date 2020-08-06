@@ -18,6 +18,8 @@ class _MyAppState extends State<MyApp> {
   bool IsBusyMode = false;
   StreamSubscription sub;
 
+  Map some;
+
   @override
   void initState() {
     super.initState();
@@ -51,9 +53,9 @@ class _MyAppState extends State<MyApp> {
       }
     });
 
-    var some = await FlutterTemi.userInfo;
+    some = await FlutterTemi.userInfo;
 
-    print("Found user info ${some}");
+    print("Found user info ${some['name']} ${some['userId']}");
     SubTemi();
   }
 
@@ -75,6 +77,13 @@ class _MyAppState extends State<MyApp> {
 //                    return new Text(snapshot.data);
 //                  }
 //                }),
+            FlatButton(
+              child: Text('Call Cyrus'),
+              onPressed: () async {
+                await FlutterTemi.temiStartTelepresence(
+                    "${some['name']}", "${some['userId']}");
+              },
+            ),
             FlatButton(
               child: Text('Wakup'),
               onPressed: () async {
