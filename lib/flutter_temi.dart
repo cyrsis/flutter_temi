@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
+
 class FlutterTemi {
   //Single Method Channel
   static const MethodChannel _channel = const MethodChannel('flutter_temi');
@@ -92,6 +93,10 @@ class FlutterTemi {
   }
   static temiFinisheConverstaion() async {
     await _channel.invokeMethod('temi_finishe_conversation');
+  }
+
+  static temiTurnKioskMode() async {
+    await _channel.invokeMethod('temi_turnKoiskMode');
   }
 
 

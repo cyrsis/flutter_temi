@@ -1,16 +1,29 @@
 package tech.blockmanic.flutter_temi
 
+import android.app.Activity
+import android.content.Context
+import androidx.annotation.NonNull
+import android.content.pm.PackageManager
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
+import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import com.robotemi.sdk.*
 import io.flutter.plugin.common.EventChannel
 import com.robotemi.sdk.TtsRequest
 
 
-class FlutterTemiPlugin : MethodCallHandler {
+
+
+class FlutterTemiPlugin : FlutterPlugin, MethodCallHandler, ActivityAware  {
+
+    private lateinit var channel : MethodChannel
+    private lateinit var context: Context
+    private lateinit var activity: Activity
 
     private val robot: Robot = Robot.getInstance()
     private val goToLocationStatusChangedImpl: GoToLocationStatusChangedImpl = GoToLocationStatusChangedImpl()
@@ -30,7 +43,34 @@ class FlutterTemiPlugin : MethodCallHandler {
     private val onDetectionStateChangedListenerImpl: OnDetectionStateChangedListenerImpl = OnDetectionStateChangedListenerImpl()
     private val onRobotReadyListenerImpl: OnRobotReadyListenerImpl = OnRobotReadyListenerImpl()
 
+    override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "flutter_plugin_name")
+        channel.setMethodCallHandler(this);
+        context = flutterPluginBinding.applicationContext
+    }
+
+    override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+        channel.setMethodCallHandler(null)
+    }
+
+    override fun onDetachedFromActivity() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        activity = binding.activity;
+    }
+
+    override fun onDetachedFromActivityForConfigChanges() {
+        TODO("Not yet implemented")
+    }
+
     companion object {
+
         @JvmStatic
         fun registerWith(registrar: Registrar) {
             val channel = MethodChannel(registrar.messenger(), "flutter_temi")
@@ -100,6 +140,9 @@ class FlutterTemiPlugin : MethodCallHandler {
 
 
     }
+
+
+
 
 
     override fun onMethodCall(call: MethodCall, result: Result) {
@@ -238,6 +281,13 @@ class FlutterTemiPlugin : MethodCallHandler {
                 robot.toggleNavigationBillboard(hide)
                 result.success(true)
             }
+            "temi_turnKoiskMode" -> {
+                var activityInfo= context.getPackageManager()
+                        .getActivityInfo(activity.getComponentName(), PackageManager.GET_META_DATA)
+                robot.onStart(activityInfo)
+                result.success(true)
+            }
+
             else -> {
                 result.notImplemented()
             }
