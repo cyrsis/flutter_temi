@@ -81,7 +81,7 @@ class FlutterTemi {
     await _channel.invokeMethod('temi_speak', speech);
   }
 
-  static temiShowAppList(temi_showAppList) async {
+  static temiShowAppList() async {
     await _channel.invokeMethod('temi_showAppList');
   }
 
