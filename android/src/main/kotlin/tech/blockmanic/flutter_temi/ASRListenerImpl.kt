@@ -1,7 +1,6 @@
 package tech.blockmanic.flutter_temi
 
 import com.robotemi.sdk.Robot
-import com.robotemi.sdk.TtsRequest
 import io.flutter.plugin.common.EventChannel
 
 class ASRListenerImpl : Robot.AsrListener, EventChannel.StreamHandler {

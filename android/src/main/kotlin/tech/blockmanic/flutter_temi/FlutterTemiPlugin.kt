@@ -223,6 +223,11 @@ class FlutterTemiPlugin : MethodCallHandler {
                 robot.wakeup()
                 result.success(true)
             }
+            "temi_showAppList" -> {
+                robot.showAppList()
+                result.success(true)
+            }
+
             "temi_toggle_wakeup" -> {
                 val disable = call.arguments<Boolean>()
                 robot.toggleWakeup(disable)
