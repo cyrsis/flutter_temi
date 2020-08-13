@@ -28,6 +28,9 @@
                  until Flutter renders its first frame. It can be removed if
                  there is no splash screen (such as the default splash screen
                  defined in @style/LaunchTheme). -->
+            <!--            for Lock in Koisk Mode-->
+            <meta-data android:name="com.robotemi.sdk.metadata.UI_MODE" android:value="4" />
+
             <meta-data
                     android:name="io.flutter.app.android.SplashScreenUntilFirstFrame"
                     android:value="true"/>

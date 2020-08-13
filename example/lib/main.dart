@@ -85,6 +85,16 @@ class _MyAppState extends State<MyApp> {
               },
             ),
             FlatButton(
+              child: Text('Show All Apps'),
+              onPressed: () async {
+                await FlutterTemi.temiShowAppList();
+              }),
+            FlatButton(
+                child: Text('Turn Kiosk'),
+                onPressed: () async {
+                  await FlutterTemi.temiTurnKioskMode();
+                }),
+            FlatButton(
               child: Text('Wakup'),
               onPressed: () async {
                 await FlutterTemi.temiWakeup();
@@ -155,7 +165,6 @@ class _MyAppState extends State<MyApp> {
               child: Text('Title  by'),
               onPressed: () async => FlutterTemi.temiTiltBy(15),
             ),
-
           ],
         ),
       ),

@@ -21,7 +21,7 @@ class FlutterTemi {
   static const EventChannel _nlpEventChannel =
       EventChannel('flutter_temi/nlp_stream');
 
-  static const EventChannel _onUserInteractionEventChannel =
+  static const EventChannel _onUserIntaeractionEventChannel =
       EventChannel('flutter_temi/on_user_interaction_stream');
 
   static const EventChannel _ttsEventChannel =
@@ -85,7 +85,6 @@ class FlutterTemi {
   static temiShowAppList() async {
     await _channel.invokeMethod('temi_showAppList');
   }
-
 
 
   static temiSpeakForce(String speech) async {
@@ -197,7 +196,7 @@ class FlutterTemi {
   }
 
   static Stream<bool> temiSubscribeToOnUserInteractionEvents() {
-    return _onUserInteractionEventChannel.receiveBroadcastStream();
+    return _onUserIntaeractionEventChannel.receiveBroadcastStream();
   }
 
   static Stream<Map<String, dynamic>> temiSubscribeToTtsEvents() {

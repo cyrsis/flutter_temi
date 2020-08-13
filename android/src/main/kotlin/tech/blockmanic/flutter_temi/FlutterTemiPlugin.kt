@@ -17,12 +17,10 @@ import io.flutter.plugin.common.EventChannel
 import com.robotemi.sdk.TtsRequest
 
 
+class FlutterTemiPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
-
-class FlutterTemiPlugin : FlutterPlugin, MethodCallHandler, ActivityAware  {
-
-    private lateinit var channel : MethodChannel
-    private lateinit var context: Context
+    private lateinit var channel: MethodChannel
+    private lateinit var application_context: Context
     private lateinit var activity: Activity
 
     private val robot: Robot = Robot.getInstance()
@@ -44,9 +42,9 @@ class FlutterTemiPlugin : FlutterPlugin, MethodCallHandler, ActivityAware  {
     private val onRobotReadyListenerImpl: OnRobotReadyListenerImpl = OnRobotReadyListenerImpl()
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "flutter_plugin_name")
+        channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "flutter_temi")
         channel.setMethodCallHandler(this);
-        context = flutterPluginBinding.applicationContext
+        this.application_context = flutterPluginBinding.applicationContext
     }
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
@@ -140,9 +138,6 @@ class FlutterTemiPlugin : FlutterPlugin, MethodCallHandler, ActivityAware  {
 
 
     }
-
-
-
 
 
     override fun onMethodCall(call: MethodCall, result: Result) {
@@ -282,7 +277,7 @@ class FlutterTemiPlugin : FlutterPlugin, MethodCallHandler, ActivityAware  {
                 result.success(true)
             }
             "temi_turnKoiskMode" -> {
-                var activityInfo= context.getPackageManager()
+                val activityInfo = application_context.getPackageManager()
                         .getActivityInfo(activity.getComponentName(), PackageManager.GET_META_DATA)
                 robot.onStart(activityInfo)
                 result.success(true)
