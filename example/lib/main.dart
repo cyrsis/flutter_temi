@@ -68,15 +68,15 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Wrap(
           children: <Widget>[
-//            new StreamBuilder(
-//                stream: FlutterTemi.temiSubscribeToAsrEvents(),
-//                builder: (BuildContext context, snapshot) {
-//                  if (!snapshot.hasData)
-//                    return const Text('loading ASR');
-//                  else {
-//                    return new Text(snapshot.data);
-//                  }
-//                }),
+            new StreamBuilder(
+                stream: FlutterTemi.temiSubscribeToOnLocationStatusChangeEvents(),
+                builder: (BuildContext context, snapshot) {
+                  if (!snapshot.hasData)
+                    return const Text('loading Location');
+                  else {
+                    return new Text(snapshot.data);
+                  }
+                }),
             FlatButton(
               child: Text('Call Cyrus'),
               onPressed: () async {
