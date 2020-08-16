@@ -17,7 +17,7 @@ import io.flutter.plugin.common.EventChannel
 import com.robotemi.sdk.TtsRequest
 
 
-class FlutterTemiPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
+class FlutterTemiPlugin :  MethodCallHandler, ActivityAware ,FlutterPlugin {
 
     private lateinit var channel: MethodChannel
     private lateinit var application_context: Context
@@ -41,39 +41,48 @@ class FlutterTemiPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private val onDetectionStateChangedListenerImpl: OnDetectionStateChangedListenerImpl = OnDetectionStateChangedListenerImpl()
     private val onRobotReadyListenerImpl: OnRobotReadyListenerImpl = OnRobotReadyListenerImpl()
 
+//Flutter plugin
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "flutter_temi")
         channel.setMethodCallHandler(this);
-        this.application_context = flutterPluginBinding.applicationContext
+        application_context = flutterPluginBinding.applicationContext
+
     }
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
     }
-
+//
+    //ActivityAware
     override fun onDetachedFromActivity() {
         TODO("Not yet implemented")
     }
-
+//
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
         TODO("Not yet implemented")
     }
-
+//
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activity = binding.activity;
     }
-
+//
     override fun onDetachedFromActivityForConfigChanges() {
         TODO("Not yet implemented")
     }
 
     companion object {
 
+
         @JvmStatic
         fun registerWith(registrar: Registrar) {
+
             val channel = MethodChannel(registrar.messenger(), "flutter_temi")
             val plugin = FlutterTemiPlugin()
+            //added
+            plugin.application_context=registrar.activity().getApplication();
+            plugin.activity = registrar.activity();
             channel.setMethodCallHandler(plugin)
+
 
             val onBeWithMeEventChannel = EventChannel(registrar.messenger(), OnBeWithMeStatusChangedImpl.STREAM_CHANNEL_NAME)
             onBeWithMeEventChannel.setStreamHandler(plugin.onBeWithMeStatusChangedImpl)

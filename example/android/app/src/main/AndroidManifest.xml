@@ -9,7 +9,8 @@
     <application
             android:name="io.flutter.app.FlutterApplication"
             android:label="flutter_temi_example"
-            android:icon="@mipmap/ic_launcher">
+            android:icon="@mipmap/ic_launcher"
+    >
         <!--       Make Temi Run into Kiosk Mode-->
         <meta-data
                 android:name="com.robotemi.sdk.metadata.SKILL"
