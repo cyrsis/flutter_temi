@@ -11,7 +11,7 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 //import io.flutter.embedding.engine.plugins.activity.ActivityAware
-import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+//import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import com.robotemi.sdk.*
 import io.flutter.plugin.common.EventChannel
 import com.robotemi.sdk.TtsRequest
