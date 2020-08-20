@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> {
                   if (!snapshot.hasData)
                     return const Text('loading Location');
                   else {
-                    return new Text(snapshot.data);
+                    return new Text(snapshot.data.toString());
                   }
                 }),
             FlatButton(
@@ -109,7 +109,9 @@ class _MyAppState extends State<MyApp> {
             ),
             FlatButton(
               child: Text('Goto Victor'),
-              onPressed: () async => FlutterTemi.temiGoTo('victor'),
+              onPressed: () async {
+                await  FlutterTemi.temiGoTo('victor');
+              },
             ),
             FlatButton(
               child: Text('Speak Victor'),

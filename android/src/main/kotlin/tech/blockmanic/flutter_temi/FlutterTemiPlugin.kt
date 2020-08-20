@@ -9,7 +9,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
-import io.flutter.embedding.engine.plugins.FlutterPlugin
+//import io.flutter.embedding.engine.plugins.FlutterPlugin
 //import io.flutter.embedding.engine.plugins.activity.ActivityAware
 //import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import com.robotemi.sdk.*
@@ -78,10 +78,13 @@ class FlutterTemiPlugin :  MethodCallHandler  {
 
             val channel = MethodChannel(registrar.messenger(), "flutter_temi")
             val plugin = FlutterTemiPlugin()
-            //added
-            plugin.application_context=registrar.activity().getApplication();
-            plugin.activity = registrar.activity();
             channel.setMethodCallHandler(plugin)
+
+            //added
+            plugin.application_context=registrar.activity().getApplication()
+            plugin.activity = registrar.activity()
+
+
 
 
             val onBeWithMeEventChannel = EventChannel(registrar.messenger(), OnBeWithMeStatusChangedImpl.STREAM_CHANNEL_NAME)
