@@ -1,3 +1,6 @@
+## 0.0.13
+-- Make V2 Binding
+
 ## 0.0.12
 -- Upgraded with the Temi SDK
 -- Add support of the repose

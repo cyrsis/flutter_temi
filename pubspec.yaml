@@ -1,6 +1,6 @@
 name: flutter_temi
 description: Flutter plugin for Temi
-version: 0.0.12
+version: 0.0.13
 homepage: https://www.blockmanic.com/
 
 environment:
