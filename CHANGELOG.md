@@ -1,3 +1,9 @@
+## 0.0.12
+-- Upgraded with the Temi SDK
+-- Add support of the repose
+
+
+
 ## 0.0.9
 -- Fix the location Stream
 

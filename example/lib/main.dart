@@ -69,7 +69,8 @@ class _MyAppState extends State<MyApp> {
         body: Wrap(
           children: <Widget>[
             new StreamBuilder(
-                stream: FlutterTemi.temiSubscribeToOnLocationStatusChangeEvents(),
+                stream:
+                    FlutterTemi.temiSubscribeToOnLocationStatusChangeEvents(),
                 builder: (BuildContext context, snapshot) {
                   if (!snapshot.hasData)
                     return const Text('loading Location');
@@ -85,10 +86,10 @@ class _MyAppState extends State<MyApp> {
               },
             ),
             FlatButton(
-              child: Text('Show All Apps'),
-              onPressed: () async {
-                await FlutterTemi.temiShowAppList();
-              }),
+                child: Text('Show All Apps'),
+                onPressed: () async {
+                  await FlutterTemi.temiShowAppList();
+                }),
             FlatButton(
                 child: Text('Turn Kiosk'),
                 onPressed: () async {
@@ -110,7 +111,7 @@ class _MyAppState extends State<MyApp> {
             FlatButton(
               child: Text('Goto Victor'),
               onPressed: () async {
-                await  FlutterTemi.temiGoTo('victor');
+                await FlutterTemi.temiGoTo('victor');
               },
             ),
             FlatButton(
@@ -160,12 +161,16 @@ class _MyAppState extends State<MyApp> {
               },
             ),
             FlatButton(
-              child: Text('Title  by'),
+              child: Text('Title  by 15'),
               onPressed: () async => FlutterTemi.temiTiltBy(15),
             ),
             FlatButton(
-              child: Text('Title  by'),
+              child: Text('Title  by 15'),
               onPressed: () async => FlutterTemi.temiTiltBy(15),
+            ),
+            FlatButton(
+              child: Text('Repose'),
+              onPressed: () async => FlutterTemi.temiRepose(),
             ),
           ],
         ),

@@ -98,6 +98,10 @@ class FlutterTemi {
     await _channel.invokeMethod('temi_turnKoiskMode');
   }
 
+  static temiRepose() async {
+    await _channel.invokeMethod('temi_repose');
+  }
+
 
   static temiGoTo(String location) async {
     await _channel.invokeMethod('temi_goto', location);

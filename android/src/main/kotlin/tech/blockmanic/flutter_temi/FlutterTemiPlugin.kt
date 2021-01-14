@@ -17,7 +17,7 @@ import io.flutter.plugin.common.EventChannel
 import com.robotemi.sdk.TtsRequest
 
 
-class FlutterTemiPlugin :  MethodCallHandler  {
+class FlutterTemiPlugin : MethodCallHandler {
 
     private lateinit var channel: MethodChannel
     public lateinit var application_context: Context
@@ -34,6 +34,7 @@ class FlutterTemiPlugin :  MethodCallHandler  {
 
     private val wakeupWordListenerImpl: WakeupWordListenerImpl = WakeupWordListenerImpl()
     private val onConstraintBeWithStatusListenerImpl: OnConstraintBeWithStatusListenerImpl = OnConstraintBeWithStatusListenerImpl()
+
     //private val onTelepresenceStatusChangedListenerImpl : OnTelepresenceStatusChangedListenerImpl = OnTelepresenceStatusChangedListenerImpl()
     //private val onUsersUpdatedListenerImpl : OnUsersUpdatedListenerImpl = OnUsersUpdatedListenerImpl()
     private val onPrivacyModeChangedListenerImpl: OnPrivacyModeChangedListenerImpl = OnPrivacyModeChangedListenerImpl()
@@ -47,13 +48,15 @@ class FlutterTemiPlugin :  MethodCallHandler  {
 //        channel.setMethodCallHandler(this);
 //        application_context = flutterPluginBinding.applicationContext
 //
+//
+//
 //    }
 //
 //    override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
 //        channel.setMethodCallHandler(null)
 //    }
 ////
-//    //ActivityAware
+    //ActivityAware
 //    override fun onDetachedFromActivity() {
 //        TODO("Not yet implemented")
 //    }
@@ -72,19 +75,15 @@ class FlutterTemiPlugin :  MethodCallHandler  {
 
     companion object {
 
-
         @JvmStatic
         fun registerWith(registrar: Registrar) {
-
             val channel = MethodChannel(registrar.messenger(), "flutter_temi")
             val plugin = FlutterTemiPlugin()
             channel.setMethodCallHandler(plugin)
 
             //added
-            plugin.application_context=registrar.activity().getApplication()
+            plugin.application_context = registrar.activity().getApplication()
             plugin.activity = registrar.activity()
-
-
 
 
             val onBeWithMeEventChannel = EventChannel(registrar.messenger(), OnBeWithMeStatusChangedImpl.STREAM_CHANNEL_NAME)
@@ -292,6 +291,10 @@ class FlutterTemiPlugin :  MethodCallHandler  {
                 val activityInfo = application_context.getPackageManager()
                         .getActivityInfo(activity.getComponentName(), PackageManager.GET_META_DATA)
                 robot.onStart(activityInfo)
+                result.success(true)
+            }
+            "temi_repose" -> {
+                robot.repose()
                 result.success(true)
             }
 
